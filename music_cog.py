@@ -35,7 +35,7 @@ class music_cog(commands.Cog):
 
             #get the first url
             m_url = self.music_queue[0][0]['source']
-
+            self.currentSong = self.music_queue[0][0]['title']
             #remove the first element as you are currently playing it
             self.music_queue.pop(0)
 
@@ -59,7 +59,7 @@ class music_cog(commands.Cog):
             
             print(self.music_queue)
             #remove the first element as you are currently playing it
-            self.currentSong += self.music_queue[0][0]['title']
+            self.currentSong = self.music_queue[0][0]['title']
             await ctx.send(self.currentSong + " added to the queue")
             
             self.music_queue.pop(0)
@@ -118,3 +118,16 @@ class music_cog(commands.Cog):
     @commands.command(name="next", help="Gives name of next song")
     async def next(self,ctx):
         await ctx.send(self.music_queue[0][0]["title"])
+
+    @commands.command(name='go', help='Go to specific number in queue')
+    async def go(self,ctx, intPara):
+        if(int(intPara) >= len(self.music_queue)):
+            await ctx.send("That's not a valid number")
+            return
+        self.currentSong = self.music_queue[int(intPara) - 1][0]['title']
+        for i in range(0, int(intPara) - 1):
+            self.music_queue.pop(0)
+        self.vc.stop()
+        await ctx.send(self.currentSong)
+        await self.play_music()
+        

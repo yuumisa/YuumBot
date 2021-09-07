@@ -1,0 +1,10 @@
+Features:
+
+Spotify Links
+Search songs - youtube (Implemented)*
+Genius.com lyrics
+Add a Queue system (Implemented)*
+
+Bugs: 
+
+Player won't work when bot is already connected to voice channel (Somewhat fixed)

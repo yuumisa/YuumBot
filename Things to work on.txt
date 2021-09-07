@@ -4,6 +4,7 @@ Spotify Links
 Search songs - youtube (Implemented)*
 Genius.com lyrics
 Add a Queue system (Implemented)*
+Added song title when adding songs to queue, queue system is numbered and properly displays titles.
 
 Bugs: 
 

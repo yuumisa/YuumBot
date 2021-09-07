@@ -1,3 +1,4 @@
+from tokenize import triple_quoted
 import discord
 from discord.ext import commands
 
@@ -43,7 +44,7 @@ class music_cog(commands.Cog):
             self.is_playing = False
 
     # infinite loop checking 
-    async def play_music(self):
+    async def play_music(self, ctx):
         if len(self.music_queue) > 0:
             self.is_playing = True
 
@@ -59,6 +60,8 @@ class music_cog(commands.Cog):
             print(self.music_queue)
             #remove the first element as you are currently playing it
             self.currentSong += self.music_queue[0][0]['title']
+            await ctx.send(self.currentSong + " added to the queue")
+            
             self.music_queue.pop(0)
 
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
@@ -78,17 +81,17 @@ class music_cog(commands.Cog):
             if type(song) == type(True):
                 await ctx.send("Could not download the song. Incorrect format try another keyword. This could be due to playlist or a livestream format.")
             else:
-                await ctx.send("Song added to the queue")
                 self.music_queue.append([song, voice_channel])
-                
+                if self.is_playing == True:
+                    await ctx.send(song['title'] + " added to the queue")
                 if self.is_playing == False:
-                    await self.play_music()
+                    await self.play_music(ctx)
 
     @commands.command(name="queue", help="Displays the current songs in queue")
     async def q(self, ctx):
         retval = ""
         for i in range(0, len(self.music_queue)):
-            retval += self.music_queue[i][0]['title'] + "\n"
+            retval += str(i+1) + ". " + self.music_queue[i][0]['title'] + "\n"
 
         print(retval)
         if retval != "":
@@ -111,3 +114,7 @@ class music_cog(commands.Cog):
     @commands.command(name="stop", help="Stops playing music")
     async def stop(self,ctx):
         await ctx.voice_client.disconnect()
+    
+    @commands.command(name="next", help="Gives name of next song")
+    async def next(self,ctx):
+        await ctx.send(self.music_queue[0][0]["title"])

@@ -4,8 +4,9 @@ Spotify Links
 Search songs - youtube (Implemented)*
 Genius.com lyrics
 Add a Queue system (Implemented)*
-Added song title when adding songs to queue, queue system is numbered and properly displays titles.
-Added method to skip certain song in queue via number system
+Added song title when adding songs to queue, queue system is numbered and properly displays titles.*
+Added method to skip certain song in queue via number system*
+Need to add way to queue entire playlists
 
 Bugs: 
 

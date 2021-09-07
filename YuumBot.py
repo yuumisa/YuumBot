@@ -8,11 +8,13 @@ import youtube_dl
 import asyncio
 
 from music_cog import music_cog
+from fun_cog import fun_cog
 
 intents = discord.Intents.default()
 client = commands.Bot(command_prefix = '&', intents = intents)
 
 client.add_cog(music_cog(client))
+client.add_cog(fun_cog(client))
 
 @client.event
 async def on_ready():

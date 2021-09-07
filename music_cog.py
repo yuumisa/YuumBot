@@ -73,7 +73,7 @@ class music_cog(commands.Cog):
         query = " ".join(args)
         
         voice_channel = ctx.author.voice.channel
-        if voice_channel is None:
+        if ctx.author.voice is None:
             #you need to be connected so that the bot knows where to go
             await ctx.send("Connect to a voice channel!")
         else:
@@ -130,4 +130,4 @@ class music_cog(commands.Cog):
         self.vc.stop()
         await ctx.send(self.currentSong)
         await self.play_music()
-        
+    

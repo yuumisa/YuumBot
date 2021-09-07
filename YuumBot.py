@@ -38,6 +38,6 @@ async def leave(ctx):
     await ctx.voice_client.disconnect()
 
 
-client.run('ODg0NjIzNjI3NzU5MjY3ODcy.YTbL9A.JPmBLOfZSJrO73wCHj87r8lrjmI')
+client.run('ODg0NjIzNjI3NzU5MjY3ODcy.YTbL9A.iObVzbZ_oT95N0IF-uSiJjyM3as')
 
  

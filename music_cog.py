@@ -16,6 +16,7 @@ class music_cog(commands.Cog):
         self.FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
         self.vc = ""
+        self.currentSong = ""
 
      #searching the item on youtube
     def search_yt(self, item):
@@ -57,6 +58,7 @@ class music_cog(commands.Cog):
             
             print(self.music_queue)
             #remove the first element as you are currently playing it
+            self.currentSong += self.music_queue[0][0]['title']
             self.music_queue.pop(0)
 
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
@@ -100,3 +102,12 @@ class music_cog(commands.Cog):
             self.vc.stop()
             #try to play next in the queue if it exists
             await self.play_music()
+
+
+    @commands.command(name="current", help="Gives name of song currently playing")
+    async def current(self, ctx):
+        await ctx.send(self.currentSong)
+
+    @commands.command(name="stop", help="Stops playing music")
+    async def stop(self,ctx):
+        await ctx.voice_client.disconnect()

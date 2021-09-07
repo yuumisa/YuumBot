@@ -1,8 +1,9 @@
 from tokenize import triple_quoted
 import discord
 from discord.ext import commands
-
+import random
 from youtube_dl import YoutubeDL
+import youtubesearchpython
 
 class music_cog(commands.Cog):
     def __init__(self, bot):
@@ -13,11 +14,12 @@ class music_cog(commands.Cog):
 
         # 2d array containing [song, channel]
         self.music_queue = []
-        self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'True'}
+        self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'False', 'quiet':'True'}
         self.FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
         self.vc = ""
         self.currentSong = ""
+
 
      #searching the item on youtube
     def search_yt(self, item):
@@ -60,7 +62,7 @@ class music_cog(commands.Cog):
             print(self.music_queue)
             #remove the first element as you are currently playing it
             self.currentSong = self.music_queue[0][0]['title']
-            await ctx.send(self.currentSong + " added to the queue")
+            await ctx.send(self.currentSong + " is playing")
             
             self.music_queue.pop(0)
 
@@ -131,3 +133,12 @@ class music_cog(commands.Cog):
         await ctx.send(self.currentSong)
         await self.play_music()
     
+    @commands.command(name="shuffle", help="Shuffles current queue")
+    async def shuffle(self,ctx):
+        random.shuffle(self.music_queue)
+        await ctx.send("Queue has been shuffled")
+        return
+
+    @commands.command(name="playlist", help="Playlist")
+    async def shuffle(self,ctx, url):
+        playlist = Playlist.getVideos(str(url))

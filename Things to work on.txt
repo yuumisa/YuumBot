@@ -1,3 +1,5 @@
+* - Completed
+
 Features:
 
 Spotify Links
@@ -7,7 +9,7 @@ Add a Queue system (Implemented)*
 Added song title when adding songs to queue, queue system is numbered and properly displays titles.*
 Added method to skip certain song in queue via number system*
 Need to add way to queue entire playlists
-Shuffle Method
+Shuffle Method*
 
 Bugs: 
 

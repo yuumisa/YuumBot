@@ -12,6 +12,7 @@ Need to add way to queue entire playlists*
 Shuffle Method*
 Need to optimize Queue command.
 Figure out how to use emojis 
+Need shutdown command
 
 Bugs: 
 

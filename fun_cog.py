@@ -15,4 +15,5 @@ class fun_cog(commands.Cog):
 
     @commands.command(name="test", help="test")
     async def test(self,ctx):
-        await ctx.send("test")
+        await ctx.send("<a:Sussy:881541286685982740>")
+        await ctx.send("<:OOO:845042095843442780>")

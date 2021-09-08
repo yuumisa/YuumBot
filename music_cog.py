@@ -4,6 +4,7 @@ from discord.ext import commands
 import random
 from youtube_dl import YoutubeDL
 import youtubesearchpython
+from collections import deque
 
 class music_cog(commands.Cog):
     def __init__(self, bot):
@@ -14,11 +15,13 @@ class music_cog(commands.Cog):
 
         # 2d array containing [song, channel]
         self.music_queue = []
+        self.hist_queue = deque([])
         self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'False', 'quiet':'True'}
         self.FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
         self.vc = ""
         self.currentSong = ""
+        self.prevSong = ""
 
      #searching the item on youtube
     def search_yt(self, item):
@@ -39,7 +42,9 @@ class music_cog(commands.Cog):
             self.currentSong = self.music_queue[0][0]['title']
             #remove the first element as you are currently playing it
             self.music_queue.pop(0)
-
+            if(len(self.hist_queue) > 10):
+                self.hist_queue.pop()
+            self.hist_queue.appendleft(self.currentSong)
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         else:
             self.is_playing = False
@@ -61,11 +66,14 @@ class music_cog(commands.Cog):
             print(self.music_queue)
             #remove the first element as you are currently playing it
             self.currentSong = self.music_queue[0][0]['title']
+            self.prevSong = self.currentSong
+           
             await ctx.send(self.currentSong + " is playing")
             
             self.music_queue.pop(0)
 
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
+            
         else:
             self.is_playing = False
 
@@ -108,6 +116,8 @@ class music_cog(commands.Cog):
 
     @commands.command(name="current", help="Gives name of song currently playing")
     async def current(self, ctx):
+        if self.is_playing == False:
+            return await ctx.send("Nothing is playing")
         await ctx.send(self.currentSong)
 
     @commands.command(name="stop", help="Stops playing music")
@@ -138,6 +148,9 @@ class music_cog(commands.Cog):
 
     @commands.command(name="playlist", help="Playlist")
     async def playlist(self,ctx, url):
+        if(ctx.author.voice is None):
+            await ctx.send("You're not in a channel")
+            return
         playlist = youtubesearchpython.Playlist.getVideos(str(url))
         id = playlist['videos'][0]['title']
         await self.bot.get_command('play').callback(self,ctx,"https://www.youtube.com/watch?v=" + str(id))
@@ -150,3 +163,12 @@ class music_cog(commands.Cog):
         self.music_queue.clear()
         await ctx.send("Queue was cleared")
         return
+
+    #hist method adds current song into queue. Trying to avoid this and add after completion
+    @commands.command(name="hist",help="Listening History, Past 10 played songs")
+    async def hist(self,ctx):
+        if(len(self.hist_queue) == 0):
+            return await ctx.send("History is empty. Play some songs")
+        for i in range(0, len(self.hist_queue)):
+            hist = self.hist_queue[i]
+            await ctx.send(hist)

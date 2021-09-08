@@ -13,6 +13,13 @@ Shuffle Method*
 Need to optimize Queue command.
 Figure out how to use emojis 
 Need shutdown command
+Obscurity Level of song
+Listening History
+How long you've been listening.
+Server playlists
+Rating system
+Connect 4
+Chess?
 
 Bugs: 
 

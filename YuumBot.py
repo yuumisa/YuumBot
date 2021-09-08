@@ -22,7 +22,7 @@ async def on_ready():
 
 @client.command()
 async def bio(ctx):
-    await ctx.channel.send("I am YuumBot, I'm not sure what I'm supposed to do yet. Ask <@!134117892747821056> about it.")
+    await ctx.channel.send("I am YuumBot. Current Version: 1.3. As of right now, I am primarily a music bot. Full list of features coming soon via &help. Ask <@!134117892747821056> about anything regarding me.")
 
 @client.command()
 async def join(ctx):

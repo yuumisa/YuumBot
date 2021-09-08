@@ -20,7 +20,6 @@ class music_cog(commands.Cog):
         self.vc = ""
         self.currentSong = ""
 
-
      #searching the item on youtube
     def search_yt(self, item):
         with YoutubeDL(self.YDL_OPTIONS) as ydl:
@@ -71,7 +70,7 @@ class music_cog(commands.Cog):
             self.is_playing = False
 
     @commands.command(name="play", help="Plays a selected song from youtube")
-    async def p(self, ctx, *args):
+    async def play(self, ctx, *args):
         query = " ".join(args)
         
         voice_channel = ctx.author.voice.channel
@@ -90,15 +89,13 @@ class music_cog(commands.Cog):
                     await self.play_music(ctx)
 
     @commands.command(name="queue", help="Displays the current songs in queue")
-    async def q(self, ctx):
+    async def queue(self, ctx):
         retval = ""
         for i in range(0, len(self.music_queue)):
-            retval += str(i+1) + ". " + self.music_queue[i][0]['title'] + "\n"
-
-        print(retval)
-        if retval != "":
+            retval = str(i+1) + ". " + self.music_queue[i][0]['title'] + "\n"
             await ctx.send(retval)
-        else:
+
+        if retval == "":
             await ctx.send("No music in queue")
 
     @commands.command(name="skip", help="Skips the current song being played")
@@ -140,5 +137,16 @@ class music_cog(commands.Cog):
         return
 
     @commands.command(name="playlist", help="Playlist")
-    async def shuffle(self,ctx, url):
-        playlist = Playlist.getVideos(str(url))
+    async def playlist(self,ctx, url):
+        playlist = youtubesearchpython.Playlist.getVideos(str(url))
+        id = playlist['videos'][0]['title']
+        await self.bot.get_command('play').callback(self,ctx,"https://www.youtube.com/watch?v=" + str(id))
+        for i in range(1,len(playlist['videos'])):
+            id = playlist['videos'][i]['title']
+            await self.bot.get_command('play').callback(self,ctx,id)
+
+    @commands.command(name="clear",help="Clear's current queue")
+    async def clear(self,ctx):
+        self.music_queue.clear()
+        await ctx.send("Queue was cleared")
+        return

@@ -8,10 +8,11 @@ Genius.com lyrics
 Add a Queue system (Implemented)*
 Added song title when adding songs to queue, queue system is numbered and properly displays titles.*
 Added method to skip certain song in queue via number system*
-Need to add way to queue entire playlists
+Need to add way to queue entire playlists*
 Shuffle Method*
+Need to optimize Queue command.
 
 Bugs: 
 
-Player won't work when bot is already connected to voice channel (Somewhat fixed)
-Go function needs work. Sometimes queue numbers dont update properly
+Player won't work when bot is already connected to voice channel (Somewhat fixed)*
+Go function needs work. Sometimes queue numbers dont update properly.*

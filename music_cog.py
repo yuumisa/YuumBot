@@ -14,7 +14,7 @@ class music_cog(commands.Cog):
         self.is_playing = False
 
         # 2d array containing [song, channel]
-        self.music_queue = []
+        self.music_queue = deque([])
         self.hist_queue = deque([])
         self.YDL_OPTIONS = {'format': 'bestaudio', 'noplaylist':'False', 'quiet':'True'}
         self.FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
@@ -36,17 +36,21 @@ class music_cog(commands.Cog):
     def play_next(self):
         if len(self.music_queue) > 0:
             self.is_playing = True
-
+            if(len(self.hist_queue) > 10):
+                self.hist_queue.pop()
+            self.hist_queue.appendleft(self.prevSong)
             #get the first url
             m_url = self.music_queue[0][0]['source']
             self.currentSong = self.music_queue[0][0]['title']
             #remove the first element as you are currently playing it
-            self.music_queue.pop(0)
-            if(len(self.hist_queue) > 10):
-                self.hist_queue.pop()
-            self.hist_queue.appendleft(self.currentSong)
+            self.music_queue.pop()
+            self.prevSong = self.currentSong
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
         else:
+            if(len(self.hist_queue) > 10):
+                self.hist_queue.pop()
+            self.hist_queue.appendleft(self.prevSong)
+            self.prevSong = ""
             self.is_playing = False
 
     # infinite loop checking 
@@ -70,7 +74,7 @@ class music_cog(commands.Cog):
            
             await ctx.send(self.currentSong + " is playing")
             
-            self.music_queue.pop(0)
+            self.music_queue.pop()
 
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
             
@@ -133,6 +137,10 @@ class music_cog(commands.Cog):
         if(int(intPara) >= len(self.music_queue)):
             await ctx.send("That's not a valid number")
             return
+        self.prevSong = self.currentSong
+        if(len(self.hist_queue) > 10):
+            self.hist_queue.pop()
+            self.hist_queue.appendleft(self.prevSong)
         self.currentSong = self.music_queue[int(intPara) - 1][0]['title']
         for i in range(0, int(intPara) - 1):
             self.music_queue.pop(0)
@@ -167,8 +175,16 @@ class music_cog(commands.Cog):
     #hist method adds current song into queue. Trying to avoid this and add after completion
     @commands.command(name="hist",help="Listening History, Past 10 played songs")
     async def hist(self,ctx):
+        str; hist = ''
+        print(self.hist_queue)
         if(len(self.hist_queue) == 0):
             return await ctx.send("History is empty. Play some songs")
         for i in range(0, len(self.hist_queue)):
-            hist = self.hist_queue[i]
-            await ctx.send(hist)
+            hist += self.hist_queue[i] + "\n"
+            
+        
+        await ctx.send("10 most recently played songs: " + "\n" +  hist)
+
+    @commands.command("name = restart", help="Restarts song")
+    async def restart(self,ctx):
+        self

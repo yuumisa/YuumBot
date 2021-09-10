@@ -21,6 +21,14 @@ Rating system
 Connect 4
 Chess?
 
+Implemented Features:
+Shuffle
+Search Song by name
+Queue System (deque)
+Playlist support
+Listening History
+Move queue numbers
+
 Bugs: 
 
 Player won't work when bot is already connected to voice channel (Somewhat fixed)*

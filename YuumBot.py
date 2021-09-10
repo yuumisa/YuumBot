@@ -6,7 +6,7 @@ from discord import FFmpegPCMAudio
 from discord.ext.commands import bot
 import youtube_dl
 import asyncio
-
+from variables import *
 from music_cog import music_cog
 from fun_cog import fun_cog
 
@@ -40,6 +40,6 @@ async def leave(ctx):
     await ctx.voice_client.disconnect()
 
 
-client.run('ODg0NjIzNjI3NzU5MjY3ODcy.YTbL9A.iObVzbZ_oT95N0IF-uSiJjyM3as')
+client.run(token)
 
  

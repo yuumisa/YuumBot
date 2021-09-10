@@ -1,3 +1,4 @@
+from shutil import move
 from tokenize import triple_quoted
 import discord
 from discord.ext import commands
@@ -115,7 +116,7 @@ class music_cog(commands.Cog):
         if self.vc != "" and self.vc:
             self.vc.stop()
             #try to play next in the queue if it exists
-            await self.play_music()
+            await self.play_music(ctx)
 
 
     @commands.command(name="current", help="Gives name of song currently playing")
@@ -146,7 +147,7 @@ class music_cog(commands.Cog):
             self.music_queue.pop(0)
         self.vc.stop()
         await ctx.send(self.currentSong)
-        await self.play_music()
+        await self.play_music(ctx)
     
     @commands.command(name="shuffle", help="Shuffles current queue")
     async def shuffle(self,ctx):
@@ -180,11 +181,20 @@ class music_cog(commands.Cog):
         if(len(self.hist_queue) == 0):
             return await ctx.send("History is empty. Play some songs")
         for i in range(0, len(self.hist_queue)):
-            hist += self.hist_queue[i] + "\n"
+            hist += str(i + 1) + ". " +  self.hist_queue[i] + "\n"
             
         
         await ctx.send("10 most recently played songs: " + "\n" +  hist)
 
-    @commands.command("name = restart", help="Restarts song")
+    @commands.command(name = "restart", help="Restarts song")
     async def restart(self,ctx):
-        self
+        self.is_playing = False
+        self.vc.stop()
+        await self.bot.get_command('play').callback(self,ctx,self.currentSong)
+        
+    @commands.command(name="move",help="Move a song in the queue to another location in the queue")
+    async def move(self,ctx,indexNum,destNum):
+        m = self.music_queue[int(indexNum) - 1]
+        self.music_queue.remove(m)
+        self.music_queue.insert(int(destNum) - 1, m)
+        await ctx.send(self.music_queue[int(indexNum) - 1][0]['title'] + " was moved to number " + str(destNum) + " in the queue.")

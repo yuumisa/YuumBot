@@ -1,6 +1,7 @@
 from tokenize import triple_quoted
 import discord
 from discord.ext import commands
+import time
 
 class fun_cog(commands.Cog):
     def __init__(self, bot):
@@ -17,3 +18,8 @@ class fun_cog(commands.Cog):
     async def test(self,ctx):
         await ctx.send("<a:Sussy:881541286685982740>")
         await ctx.send("<:OOO:845042095843442780>")
+
+    @commands.command(name="time",help="Time and Date")
+    async def time(self,ctx):
+        full = time.strftime("Right now it is %I:%M %p on %A - %B %d, %Y",time.localtime())
+        await ctx.send(full)

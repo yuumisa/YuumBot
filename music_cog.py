@@ -80,6 +80,10 @@ class music_cog(commands.Cog):
             self.vc.play(discord.FFmpegPCMAudio(m_url, **self.FFMPEG_OPTIONS), after=lambda e: self.play_next())
             
         else:
+            if(len(self.hist_queue) > 10):
+                self.hist_queue.pop()
+            self.hist_queue.appendleft(self.prevSong)
+            self.prevSong = ""
             self.is_playing = False
 
     @commands.command(name="play", help="Plays a selected song from youtube")
@@ -116,7 +120,7 @@ class music_cog(commands.Cog):
         if self.vc != "" and self.vc:
             self.vc.stop()
             #try to play next in the queue if it exists
-            await self.play_music(ctx)
+            await self.bot.get_command('play').callback(self,ctx,self.music_queue[0])
 
 
     @commands.command(name="current", help="Gives name of song currently playing")
@@ -147,7 +151,7 @@ class music_cog(commands.Cog):
             self.music_queue.pop(0)
         self.vc.stop()
         await ctx.send(self.currentSong)
-        await self.play_music(ctx)
+        await self.bot.get_command('play').callback(self,ctx,self.music_queue[0])
     
     @commands.command(name="shuffle", help="Shuffles current queue")
     async def shuffle(self,ctx):

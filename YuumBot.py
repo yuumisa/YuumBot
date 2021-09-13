@@ -39,6 +39,15 @@ async def leave(ctx):
   else:
     await ctx.voice_client.disconnect()
 
+@client.command()
+async def embed(ctx):
+  embed=discord.Embed(title="Profile", description="Profile of author", color=0x38ccc9)
+  embed.set_author(name=ctx.message.author.name)
+  embed.set_thumbnail(url=ctx.message.author.avatar_url)
+  embed.add_field(name="Date Joined", value = ctx.message.author.joined_at.strftime("%b %d, %Y"))
+  embed.set_footer(text="Profile")
+  #embed.set_image(ctx.message.author.user.avatar_url)
+  await ctx.send(embed=embed)
 
 client.run(token)
 

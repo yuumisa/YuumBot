@@ -14,10 +14,7 @@ class fun_cog(commands.Cog):
         print(self.shatoCounter)
         await ctx.send("Shato has been sus " + str(self.shatoCounter) + " times ")
 
-    @commands.command(name="test", help="test")
-    async def test(self,ctx):
-        await ctx.send("<a:Sussy:881541286685982740>")
-        await ctx.send("<:OOO:845042095843442780>")
+
 
     @commands.command(name="time",help="Time and Date")
     async def time(self,ctx):

@@ -27,6 +27,11 @@ async def on_ready():
 async def bio(ctx):
     await ctx.channel.send("I am YuumBot. Current Version: 1.3. As of right now, I am primarily a music bot. Full list of features coming soon via &help. Ask <@!134117892747821056> about anything regarding me.")
 
+@client.event
+async def on_message(message):
+  if client.user.mentioned_in(message):
+    await message.channel.send("Don't @ me please <a:catArrive:888069545183543416> <a:Sussy:881541286685982740>.")
+
 @client.command()
 async def join(ctx):
   if(ctx.author.voice is None):
@@ -44,24 +49,31 @@ async def leave(ctx):
 
 @client.command()
 async def addTwitter(ctx, username):
-  social["user"] = str(ctx.author.id)
-  social["user"][str(ctx.author.id)]["twitter"] = str(username)
+  user = str(ctx.author.id)
+  twitter = str(username)
+  add = { user : {"twitter": twitter}}
+  social.update(add)
   await ctx.send(social)
 
 @client.command()
 async def printS(ctx):
-  u2 = { "12312622": {"twitter": "idk"}}
-  social.update(u2)
+  #u2 = { "12312622": {"twitter": "idk"}}
+  #u3 = { "52562141": {"twitter": "idk"}}
+  #social.update(u2)
+  #social.update(u3)
+  username = social["134117892747821056"]["twitter"]
+  await ctx.send(username)
   await ctx.send(social)
 
 @client.command()
 async def embed(ctx):
   id = str(ctx.author.id)
+  username = social[id]["twitter"]
   embed=discord.Embed(title="Profile", description="<@!" + id + ">", color=0x38ccc9)
   embed.set_author(name=ctx.message.author.name)
   embed.set_thumbnail(url=ctx.message.author.avatar_url)
   embed.add_field(name="Date Joined", value = ctx.message.author.joined_at.strftime("%b %d, %Y"))
-  embed.add_field(name="Twitter", value = "https://twitter.com/totheskye_")
+  embed.add_field(name="Twitter", value = username)
   embed.set_footer(text="Profile")
   #embed.set_image(ctx.message.author.user.avatar_url)
   await ctx.send(embed=embed)

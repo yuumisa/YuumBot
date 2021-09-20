@@ -23,6 +23,10 @@ class music_cog(commands.Cog):
         self.vc = ""
         self.currentSong = ""
         self.prevSong = ""
+        self.userInfo = {"134117892747821056": {"playlist": "https://open.spotify.com/playlist/4AshHvYLzpobY2MkQEvBWc?si=b629e900ff6248ce",
+                            "favSong": {"url": "https://www.youtube.com/watch?v=ODQ767-hixA", "count": 10}}}
+
+    
 
      #searching the item on youtube
     def search_yt(self, item):
@@ -190,6 +194,11 @@ class music_cog(commands.Cog):
         
         await ctx.send("10 most recently played songs: " + "\n" +  hist)
 
+
+    @commands.command()
+    async def getplaylist(self,ctx):
+        return self.userInfo[str(ctx.author.id)]["playlist"]
+
     @commands.command(name = "restart", help="Restarts song")
     async def restart(self,ctx):
         self.is_playing = False
@@ -202,3 +211,19 @@ class music_cog(commands.Cog):
         self.music_queue.remove(m)
         self.music_queue.insert(int(destNum) - 1, m)
         await ctx.send(self.music_queue[int(indexNum) - 1][0]['title'] + " was moved to number " + str(destNum) + " in the queue.")
+
+    @commands.command(name="sProfile",help="User's Song Profile")
+    async def sProfile(self,ctx):
+        id = str(ctx.author.id)
+        embed=discord.Embed(title="Profile", description="<@!" + id +">", color=0x38ccc9)
+        embed.set_author(name=ctx.message.author.name)
+        embed.set_thumbnail(url=ctx.message.author.avatar_url)
+        playl = await self.bot.get_command("getplaylist").callback(self,ctx)
+        embed.add_field(name="Playlist", value = playl)
+        embed.add_field(name="Twitter", value = "https://twitter.com/totheskye_")
+        embed.set_footer(text="Profile")
+  #embed.set_image(ctx.message.author.user.avatar_url)
+        await ctx.send(embed=embed)
+
+def setup(bot):
+    bot.add_cog(music_cog(bot))

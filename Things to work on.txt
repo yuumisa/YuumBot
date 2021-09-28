@@ -21,6 +21,8 @@ Rating system
 Connect 4
 Chess?
 Time function should reflect user's location
+FIX QUEUE SYSTEM AND GO FUNCTION
+PAUSE FUNCTION
 
 
 Implemented Features:

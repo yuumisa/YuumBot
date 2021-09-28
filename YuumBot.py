@@ -31,6 +31,7 @@ async def bio(ctx):
 async def on_message(message):
   if client.user.mentioned_in(message):
     await message.channel.send("Don't @ me please <a:catArrive:888069545183543416> <a:Sussy:881541286685982740>.")
+  await client.process_commands(message)
 
 @client.command()
 async def join(ctx):

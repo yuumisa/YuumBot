@@ -194,6 +194,11 @@ class music_cog(commands.Cog):
         
         await ctx.send("10 most recently played songs: " + "\n" +  hist)
 
+    @commands.command(name = "shutthefuckup", help = "Same as stop")
+    async def shutthefuckup(self,ctx):
+        self.music_queue.clear()
+        await ctx.voice_client.disconnect()
+        await ctx.send("okay <:catThumbs:883840242371665951>")
 
     @commands.command()
     async def getplaylist(self,ctx):
